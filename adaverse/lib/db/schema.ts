@@ -13,9 +13,9 @@ export const adaProjects = table("ada_projects", {
  * Ada Year Groups Table
  * Represents different cohorts/promotions of students
  */
-export const adaYearGroups = table("ada_year_groups", {
+export const adaPromotions = table("ada_promotions", {
   id: serial("id").primaryKey(), // Auto-incrementing primary key
-  yearGroupName : text("year_group_name").notNull(), // Name of the cohort (e.g., "Frida", "Grace", "Fatoumata", "Frances", etc...)
+  promotionName : text("promotion_name").notNull(), // Name of the cohort (e.g., "Frida", "Grace", "Fatoumata", "Frances", etc...)
   startDate : date("start_date").notNull(), // Start date of the cohort (stored as DATE type)
 });
 
@@ -27,9 +27,9 @@ export const Students = table("students", {
   id: serial("id").primaryKey(), // Auto-incrementing primary key
   Name : text("name").notNull(), // Student's full name
   GithubUsername : text("github_username").notNull(), // GitHub username for portfolio tracking
-  yearGroupId : serial("year_group_id") // Foreign key to ada_year_groups
+  promotionId : serial("promotion_id") // Foreign key to promotions
     .notNull()
-    .references(() => adaYearGroups.id), // Links student to their cohort
+    .references(() => adaPromotions.id), // Links student to their cohort
 });
 
 /**
