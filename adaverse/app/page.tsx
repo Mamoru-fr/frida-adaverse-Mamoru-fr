@@ -4,6 +4,8 @@ import {Project} from "@/content/project";
 import ProjectCard from "@/components/ProjectCard";
 import {useAdaProjects} from "@/context/AdaProjectsContext";
 import {useStudentProjects} from "@/context/StudentProjectsContext";
+import {Loading} from "@/components/Loading";
+import {ErrorMessage} from "@/components/ErrorMessage";
 
 export default function Home() {
   const {listAdaProjects, loading: projectsLoading, error: projectsError} = useAdaProjects();
@@ -11,26 +13,12 @@ export default function Home() {
 
   // Show loading state
   if (projectsLoading || studentProjectsLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 text-xl">Loading projects...</div>
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent mx-auto"></div>
-        </div>
-      </div>
-    );
+    return <Loading />
   }
 
   // Show error state
   if (projectsError || studentProjectsError) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="rounded-lg bg-red-900/20 border border-red-500 p-6 text-center">
-          <h2 className="mb-2 text-xl font-bold text-red-500">Error Loading Data</h2>
-          <p className="text-red-300">{projectsError || studentProjectsError}</p>
-        </div>
-      </div>
-    );
+    return <ErrorMessage message={projectsError || studentProjectsError} />
   }
 
   return (
