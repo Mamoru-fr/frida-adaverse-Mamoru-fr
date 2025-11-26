@@ -3,44 +3,14 @@ import {adaProject} from "@/content/adaProject";
 import {Project} from "@/content/project";
 import ProjectCard from "@/components/ProjectCard";
 import {useAdaProjects} from "@/context/AdaProjectsContext";
-import {useState, useEffect} from "react";
+import {useStudentProjects} from "@/context/StudentProjectsContext";
 
 export default function Home() {
   const {listAdaProjects, loading: projectsLoading, error: projectsError} = useAdaProjects();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [studentsLoading, setStudentsLoading] = useState(true);
-  const [studentsError, setStudentsError] = useState<string | null>(null);
-
-  useEffect(() => {
-    console.log('[Client] Fetching student projects');
-
-    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-
-    fetch('/api/student-project', {
-      method: 'GET',
-      cache: 'no-store',
-      headers: {
-        'x-api-key': apiKey || '',
-      },
-    })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        console.log('[Client] Student Projects fetched:', data.length);
-        setProjects(data);
-        setStudentsLoading(false);
-      })
-      .catch(err => {
-        console.error('[Client] Error fetching student projects:', err);
-        setStudentsError(err.message);
-        setStudentsLoading(false);
-      });
-  }, []);
+  const {listStudentProjects, loading: studentProjectsLoading, error: studentProjectsError} = useStudentProjects();
 
   // Show loading state
-  if (projectsLoading || studentsLoading) {
+  if (projectsLoading || studentProjectsLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
@@ -52,12 +22,12 @@ export default function Home() {
   }
 
   // Show error state
-  if (projectsError || studentsError) {
+  if (projectsError || studentProjectsError) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="rounded-lg bg-red-900/20 border border-red-500 p-6 text-center">
           <h2 className="mb-2 text-xl font-bold text-red-500">Error Loading Data</h2>
-          <p className="text-red-300">{projectsError || studentsError}</p>
+          <p className="text-red-300">{projectsError || studentProjectsError}</p>
         </div>
       </div>
     );
@@ -65,11 +35,10 @@ export default function Home() {
 
   return (
     <div>
-
       {/* Categories */}
       <div className="space-y-10 px-8 py-16 md:px-16">
         {listAdaProjects.map((project: adaProject) => {
-          const studentProjects = projects.filter((p: Project) => p.adaProjectID === project.id);
+          const studentProjects = listStudentProjects.filter((p: Project) => p.adaProjectID === project.id);
           
           if (studentProjects.length === 0) return null;
 
