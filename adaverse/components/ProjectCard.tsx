@@ -1,6 +1,7 @@
 'use client';
 
 import {Project} from "@/content/project";
+import {externalURLformat} from "@/utils/externalURLformat";
 import {FormatDate} from "@/utils/formatDate";
 import {Image} from 'lucide-react'
 
@@ -63,7 +64,7 @@ export default function ProjectCard({project}: ProjectCardProps) {
           {/* Buttons */}
           <div className="flex gap-3">
             <a
-              href={project.githubRepoURL}
+              href={externalURLformat(project.githubRepoURL)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-1 items-center justify-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-black no-underline transition-colors hover:bg-neutral-200"
@@ -75,7 +76,7 @@ export default function ProjectCard({project}: ProjectCardProps) {
             </a>
             {project.demoURL && (
               <a
-                href={project.demoURL}
+                href={externalURLformat(project.demoURL)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center rounded-md bg-neutral-800 px-4 py-2.5 no-underline transition-colors hover:bg-neutral-700"
