@@ -4,8 +4,8 @@ import {Project} from "@/content/project";
 import ProjectCard from "@/components/ProjectCard";
 import {useAdaProjects} from "@/context/AdaProjectsContext";
 import {useStudentProjects} from "@/context/StudentProjectsContext";
-import {Loading} from "@/components/Loading";
-import {ErrorMessage} from "@/components/ErrorMessage";
+import {Loading} from "@/components/interactComponents/Loading";
+import {ErrorMessage} from "@/components/interactComponents/ErrorMessage";
 
 export default function Home() {
   const {listAdaProjects, loading: projectsLoading, error: projectsError} = useAdaProjects();
