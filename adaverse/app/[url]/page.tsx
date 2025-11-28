@@ -3,8 +3,8 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useStudentProjects } from '@/context/StudentProjectsContext';
 import { useAdaProjects } from '@/context/AdaProjectsContext';
-import { Loading } from '@/components/Loading';
-import { ErrorMessage } from '@/components/ErrorMessage';
+import { Loading } from '@/components/interactComponents/Loading';
+import { ErrorMessage } from '@/components/interactComponents/ErrorMessage';
 import { externalURLformat } from '@/utils/externalURLformat';
 import { FormatDate } from '@/utils/formatDate';
 import { Image, ArrowLeft, Github, ExternalLink, Calendar, Users } from 'lucide-react';
