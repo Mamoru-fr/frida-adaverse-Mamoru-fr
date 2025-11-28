@@ -41,7 +41,6 @@ export function AdaProjectsProvider({children}: AdaProjectsProviderProps) {
                 console.log('[AdaProjectsContext] Raw data received:', data)
                 if (isMounted) {
                     setListAdaProjects(data as adaProject[])
-                    setListAdaProjects([...data, { id: 'others', projectName: 'Others' }])
                     setLoading(false)
                     console.log('[AdaProjectsContext] Setting projects, count:', data.length)
                 }

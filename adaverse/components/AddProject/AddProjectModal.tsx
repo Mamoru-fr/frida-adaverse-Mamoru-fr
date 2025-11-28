@@ -27,18 +27,16 @@ export default function AddProjectModal() {
             studentIds: selectedIds.join(', '),
         });
     };
-    
-    // Freeze body scroll when popup is open
+
     useEffect(() => {
+        if (!isModalOpen) return;
         // Save current scroll position
         const scrollY = window.scrollY;
-        
         // Prevent body scroll
         document.body.style.position = 'fixed';
         document.body.style.top = `-${scrollY}px`;
         document.body.style.width = '100%';
         document.body.style.overflow = 'hidden';
-        
         // Cleanup: restore scroll when popup closes
         return () => {
             document.body.style.position = '';
@@ -48,16 +46,29 @@ export default function AddProjectModal() {
             window.scrollTo(0, scrollY);
         };
     }, [isModalOpen]);
-    
+
     if (!isModalOpen) return null;
-    
+
     const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
 
-        formData.image = formData.githubRepoURL + '/blob/main/thumbnail.png?raw=true';
+        // Build the image URL
+        const imageUrl = formData.githubRepoURL + '/blob/main/thumbnail.png?raw=true';
+        let imageExists = false;
+        try {
+            const res = await fetch(imageUrl, { method: 'HEAD' });
+            imageExists = res.ok;
+        } catch (err) {
+            imageExists = false;
+        }
+        if (imageExists) {
+            formData.image = imageUrl;
+        } else {
+            formData.image = '';
+            console.log('[Add Project] No image found at', imageUrl, ', using empty string');
+        }
 
-        formData.image ? null : formData.image = ''; 
-        
         try {
             const res = await fetch('/api/pending-project', {
                 method: 'POST',
@@ -193,7 +204,7 @@ export default function AddProjectModal() {
                         <label htmlFor="adaProjectID" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
                             Projet Ada
                         </label>
-                        <DropdownAdaPromotions 
+                        <DropdownAdaPromotions
                             onChange={handleChange}
                             value={formData.adaProjectID}
                         />
