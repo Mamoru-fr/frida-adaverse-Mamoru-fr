@@ -7,6 +7,7 @@ import { sql } from "drizzle-orm";
  * Execute approved projects from the SQL file
  * This script reads 005_approved_projects.sql and executes it
  * Then clears the file after successful execution
+ * Note: Projects are already deleted from pending_projects when approved
  */
 async function approveProjects() {
     const sqlFilePath = join(__dirname, 'migrations', '005_approved_projects.sql');

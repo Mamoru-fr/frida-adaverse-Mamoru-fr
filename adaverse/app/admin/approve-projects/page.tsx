@@ -12,6 +12,7 @@ export default function ApproveProjectsPage() {
     const { listAdaProjects } = useAdaProjects();
     const { listStudents } = useStudents();
     const [loading, setLoading] = useState<number | null>(null);
+    const [hiddenProjects, setHiddenProjects] = useState<Set<number>>(new Set());
 
     // Helper function to get project name by ID
     const getProjectName = (projectId: number | null) => {
@@ -30,6 +31,9 @@ export default function ApproveProjectsPage() {
         return names.join(', ');
     };
 
+    // Filter out hidden projects
+    const visibleProjects = pendingProjects.filter(p => !hiddenProjects.has(p.id));
+
     const handleApprove = async (projectId: number) => {
         setLoading(projectId);
         try {
@@ -41,8 +45,9 @@ export default function ApproveProjectsPage() {
             });
 
             if (res.ok) {
+                // Hide the project immediately
+                setHiddenProjects(prev => new Set(prev).add(projectId));
                 alert('✅ Projet approuvé ! Exécutez "npm run approve" pour appliquer les changements.');
-                await fetchPendingProjects();
             } else {
                 alert('❌ Erreur lors de l\'approbation');
             }
@@ -67,8 +72,9 @@ export default function ApproveProjectsPage() {
             });
 
             if (res.ok) {
+                // Hide the project immediately
+                setHiddenProjects(prev => new Set(prev).add(projectId));
                 alert('✅ Projet rejeté');
-                await fetchPendingProjects();
             } else {
                 alert('❌ Erreur lors du rejet');
             }
@@ -86,7 +92,7 @@ export default function ApproveProjectsPage() {
                 Projets en attente d'approbation
             </h1>
 
-            {pendingProjects.length === 0 ? (
+            {visibleProjects.length === 0 ? (
                 <div className={`p-8 text-center ${CombinedColors.background.card} rounded-lg`}>
                     <p className={CombinedColors.text.secondary}>
                         Aucun projet en attente
@@ -94,7 +100,7 @@ export default function ApproveProjectsPage() {
                 </div>
             ) : (
                 <div className="space-y-6">
-                    {pendingProjects.map((project) => (
+                    {visibleProjects.map((project) => (
                         <div
                             key={project.id}
                             className={`p-6 rounded-lg border ${CombinedColors.background.card} ${CombinedColors.border.default}`}

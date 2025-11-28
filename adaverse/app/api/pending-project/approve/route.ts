@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
             `DECLARE`,
             `  project_id INT;`,
             `BEGIN`,
-            `  INSERT INTO projects_students (title, image, url_name, ada_project_id, github_repo_url, demo_url, published_at)`,
+            `  INSERT INTO projects_students (title, image, url_name, ada_project_id, github_repo_url, demo_url, "createdAt")`,
             `  VALUES (`,
             `    '${project.title.replace(/'/g, "''")}',`,
             `    '${project.image.replace(/'/g, "''")}',`,
@@ -75,9 +75,6 @@ export async function POST(request: NextRequest) {
         });
 
         sqlStatements.push(
-            `  `,
-            `  -- Delete from pending_projects`,
-            `  DELETE FROM pending_projects WHERE id = ${project.id};`,
             `END $$;`,
             ``
         );
@@ -99,6 +96,10 @@ export async function POST(request: NextRequest) {
                 { status: 500 }
             );
         }
+
+        // Delete from pending_projects immediately after writing to SQL file
+        await db.delete(PendingProjects).where(eq(PendingProjects.id, parseInt(id)));
+        console.log(`[Pending Projects - APPROVE] Deleted pending project ${id} from database`);
 
         return NextResponse.json({ 
             success: true,

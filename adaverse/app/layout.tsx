@@ -8,8 +8,8 @@ import {ThemeProvider} from "@/context/ThemeContext";
 import TitleButton from "@/components/TitleButton";
 import ThemeToggle from "@/components/ThemeToggle";
 import {AddProjectProvider} from "@/context/AddProjectContext";
-import AddProjectModal from "@/components/AddProjectModal";
-import AddProjectButton from "@/components/AddProjectButton";
+import AddProjectModal from "@/components/AddProject/AddProjectModal";
+import AddProjectButton from "@/components/AddProject/AddProjectButton";
 
 export const metadata: Metadata = {
   title: "AdaVerse",

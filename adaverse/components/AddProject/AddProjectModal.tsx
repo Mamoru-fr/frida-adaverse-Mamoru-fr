@@ -1,9 +1,11 @@
 'use client';
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {X} from 'lucide-react';
 import {CombinedColors} from '@/content/Colors';
 import {useAddProject} from '@/context/AddProjectContext';
+import {DropdownAdaPromotions} from '../DropdownAdaPromotions';
+import {MultiStudentTagSelect} from '../MultiStudentTagSelect';
 
 export default function AddProjectModal() {
     const {isModalOpen, toggleModal} = useAddProject();
@@ -15,13 +17,46 @@ export default function AddProjectModal() {
         githubRepoURL: '',
         demoURL: '',
         publishedAt: '',
-        studentIds: '',
+        studentIds: '', // comma-separated string
     });
 
+    // Helper for multi-select
+    const handleStudentIdsChange = (selectedIds: string[]) => {
+        setFormData({
+            ...formData,
+            studentIds: selectedIds.join(', '),
+        });
+    };
+    
+    // Freeze body scroll when popup is open
+    useEffect(() => {
+        // Save current scroll position
+        const scrollY = window.scrollY;
+        
+        // Prevent body scroll
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        
+        // Cleanup: restore scroll when popup closes
+        return () => {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            document.body.style.overflow = '';
+            window.scrollTo(0, scrollY);
+        };
+    }, [isModalOpen]);
+    
     if (!isModalOpen) return null;
-
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        formData.image = formData.githubRepoURL + '/blob/main/thumbnail.png?raw=true';
+
+        formData.image ? null : formData.image = ''; 
         
         try {
             const res = await fetch('/api/pending-project', {
@@ -55,7 +90,7 @@ export default function AddProjectModal() {
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
@@ -106,7 +141,7 @@ export default function AddProjectModal() {
                     {/* URL Name */}
                     <div>
                         <label htmlFor="URLName" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
-                            Nom d'URL (slug) *
+                            Nom d'URL (apparaissant dans le lien) *
                         </label>
                         <input
                             type="text"
@@ -140,7 +175,7 @@ export default function AddProjectModal() {
                     {/* Demo URL */}
                     <div>
                         <label htmlFor="demoURL" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
-                            URL de la démo (optionnel)
+                            URL de la démo
                         </label>
                         <input
                             type="url"
@@ -153,67 +188,25 @@ export default function AddProjectModal() {
                         />
                     </div>
 
-                    {/* Image URL */}
-                    <div>
-                        <label htmlFor="image" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
-                            URL de l'image (optionnel)
-                        </label>
-                        <input
-                            type="url"
-                            id="image"
-                            name="image"
-                            value={formData.image}
-                            onChange={handleChange}
-                            className={`w-full rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500`}
-                            placeholder="https://example.com/image.jpg"
-                        />
-                    </div>
-
-                    {/* Ada Project ID */}
+                    {/* Ada Project */}
                     <div>
                         <label htmlFor="adaProjectID" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
-                            ID du projet Ada *
+                            Projet Ada
                         </label>
-                        <input
-                            type="number"
-                            id="adaProjectID"
-                            name="adaProjectID"
-                            required
-                            value={formData.adaProjectID}
+                        <DropdownAdaPromotions 
                             onChange={handleChange}
-                            className={`w-full rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500`}
-                            placeholder="1"
+                            value={formData.adaProjectID}
                         />
                     </div>
 
-                    {/* Student IDs */}
+                    {/* Students */}
                     <div>
                         <label htmlFor="studentIds" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
-                            IDs des étudiants (séparés par des virgules)
+                            Étudiants (sélection multiple possible)
                         </label>
-                        <input
-                            type="text"
-                            id="studentIds"
-                            name="studentIds"
-                            value={formData.studentIds}
-                            onChange={handleChange}
-                            className={`w-full rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500`}
-                            placeholder="1, 2, 3"
-                        />
-                    </div>
-
-                    {/* Published Date */}
-                    <div>
-                        <label htmlFor="publishedAt" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
-                            Date de publication (optionnel)
-                        </label>
-                        <input
-                            type="date"
-                            id="publishedAt"
-                            name="publishedAt"
-                            value={formData.publishedAt}
-                            onChange={handleChange}
-                            className={`w-full rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        <MultiStudentTagSelect
+                            value={formData.studentIds ? formData.studentIds.split(/, ?/) : []}
+                            onChange={handleStudentIdsChange}
                         />
                     </div>
 
