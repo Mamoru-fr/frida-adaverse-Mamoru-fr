@@ -117,7 +117,7 @@ export default function SearchPage() {
         ) : (
           <div className="flex flex-wrap justify-center gap-6">
             {filteredProjects.map((project) => (
-              <div key={project.id} className="flex-1 min-w-[280px] md:min-w-[300px] max-w-[350px]">
+              <div key={project.id} className="flex-1 min-w-[280px] md:min-w-[320px]">
                 <ProjectCard project={project} />
               </div>
             ))}
