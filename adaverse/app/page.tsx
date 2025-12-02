@@ -52,7 +52,7 @@ export default function Home() {
               {/* Scrollable Row */}
               <div className="scrollbar-hide -mx-8 flex gap-4 overflow-x-auto px-8 md:-mx-16 md:px-16">
                 {studentProjects.map((sp: Project) => (
-                  <div key={sp.id} className="flex-shrink-0 w-[280px] sm:w-[350px] md:w-[400px]">
+                  <div key={sp.id} className="shrink-0 w-[280px] sm:w-[350px] md:w-[400px]">
                     <ProjectCard project={sp} />
                   </div>
                 ))}
