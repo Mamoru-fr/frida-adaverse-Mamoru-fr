@@ -111,7 +111,6 @@ async function importCSV(csvPath: string) {
         const existingPending = await db.select().from(PendingProjects);
         const allAdaProjects = await db.select().from(adaProjects);
         const allStudents = await db.select().from(Students);
-        const allPromotions = await db.select().from(adaPromotions);
         
         const allURLNames = [
             ...existingProjects.map(p => p.URLName),
