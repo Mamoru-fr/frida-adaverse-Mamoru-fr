@@ -7,6 +7,7 @@ import { CombinedColors } from '@/content/Colors';
 import { useState } from 'react';
 import { X, CheckCheck } from 'lucide-react';
 import { PendingProjectCard } from '@/components/admin/PendingProjectCard';
+import { AdminNavigation } from '@/components/admin/AdminNavigation';
 import {useSession} from '@/context/SessionContext';
 import {redirect} from 'next/navigation';
 
@@ -167,6 +168,7 @@ export default function ApproveProjectsPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            <AdminNavigation />
             <div className="flex items-center justify-between mb-8">
                 <h1 className={`text-3xl font-bold ${CombinedColors.text.primary}`}>
                     Projets en attente d'approbation
