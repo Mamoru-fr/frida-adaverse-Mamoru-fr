@@ -46,6 +46,14 @@ export async function POST(request: NextRequest) {
 
         // Get session for user ID
         const session = await auth.api.getSession({ headers: await headers() });
+        
+        // Ensure user is authenticated
+        if (!session?.user?.id) {
+            return NextResponse.json(
+                { error: 'Unauthorized: User session not found' },
+                { status: 401 }
+            );
+        }
 
         // Validate required fields
         if (!title || !githubRepoURL || !studentIds) {
@@ -110,7 +118,7 @@ export async function POST(request: NextRequest) {
             githubRepoURL,
             demoURL: demoURL || null,
             studentIds, // Comma-separated string
-            userID: session?.user.id || 'unknown',
+            userID: session?.user?.id || 'unknown',
             publishedAt: publishedAt ? new Date(publishedAt) : null,
         }).returning();
 
