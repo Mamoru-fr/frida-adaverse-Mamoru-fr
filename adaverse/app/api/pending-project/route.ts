@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
             console.log(`[Pending Projects - POST] Using unique URLName: "${URLName}"`);
         }
 
-        const newPendingPro.user.id, // Now guaranteed to exist due to check aboveendingProjects).values({
+        const newPendingProject = await db.insert(PendingProjects).values({
             title,
             image: image || '',
             URLName,
