@@ -1,15 +1,19 @@
 'use client';
 
-import TitleButton from "@/components/TitleButton";
-import ThemeToggle from "@/components/ThemeToggle";
-import AddProjectButton from "@/components/AddProject/AddProjectButton";
-import {PromotionFilterDropdown} from "@/components/PromotionFilterDropdown";
-import {usePromotionFilter} from "@/context/PromotionFilterContext";
 import {usePathname} from "next/navigation";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
+import TitleButton from "@/components/TitleButton";
+import AddProjectButton from "@/components/AddProject/AddProjectButton";
+import {PromotionFilterDropdown} from "@/components/PromotionFilterDropdown";
+import {SignInHeaderButton} from "./signButton/SignInHeaderButton";
+import {SignOutHeaderButton} from "./signButton/SignOutHeaderButton";
+import {usePromotionFilter} from "@/context/PromotionFilterContext";
+import {useSession} from "@/context/SessionContext";
 
 export default function NavbarContent() {
     const {selectedPromotion, setSelectedPromotion} = usePromotionFilter();
+    const { session } = useSession();
     const pathname = usePathname();
 
     // Only show promotion filter on homepage
@@ -27,6 +31,12 @@ export default function NavbarContent() {
                 </Link>
             </div>
             <div className="flex flex-row items-center gap-4">
+                {session ? 
+                <SignOutHeaderButton />
+                :
+                <SignInHeaderButton />
+                }
+
                 {showPromotionFilter && (
                     <PromotionFilterDropdown
                         value={selectedPromotion}

@@ -7,11 +7,13 @@ import {useStudentProjects} from "@/context/StudentProjectsContext";
 import {Loading} from "@/components/interactComponents/Loading";
 import {ErrorMessage} from "@/components/interactComponents/ErrorMessage";
 import {usePromotionFilter} from "@/context/PromotionFilterContext";
+import {useSession} from "@/context/SessionContext";
 
 export default function Home() {
   const {listAdaProjects, loading: projectsLoading, error: projectsError} = useAdaProjects();
   const {listStudentProjects, loading: studentProjectsLoading, error: studentProjectsError} = useStudentProjects();
   const {selectedPromotion} = usePromotionFilter();
+  const {session} = useSession();
 
   // Show loading state
   if (projectsLoading || studentProjectsLoading) {
@@ -24,15 +26,16 @@ export default function Home() {
   }
 
   // Filter projects by promotion if selected
-  const filteredProjects = selectedPromotion 
+  const filteredProjects = selectedPromotion
     ? listStudentProjects.filter((p: Project) => {
-        if (!p.students || p.students.length === 0) return false;
-        return p.students[0].promotionId === selectedPromotion;
-      })
+      if (!p.students || p.students.length === 0) return false;
+      return p.students[0].promotionId === selectedPromotion;
+    })
     : listStudentProjects;
 
   return (
     <div>
+      {/* <pre>{session ? JSON.stringify(session.user, null, 2) : "Not connected"}</pre> */}
       {/* Categories */}
       <div className="space-y-10 px-8 py-16 md:px-16">
         {listAdaProjects.map((project: adaProject) => {
@@ -44,7 +47,7 @@ export default function Home() {
               if (!b.publishedAt) return -1;
               return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
             });
-          
+
           if (studentProjects.length === 0) return null;
 
           return (
