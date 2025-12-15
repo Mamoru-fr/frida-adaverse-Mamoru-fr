@@ -13,9 +13,9 @@ export default function ThemeToggle() {
             title={theme === 'light' ? 'Passer en mode sombre' : 'Passer en mode clair'}
         >
             {theme === 'light' ? (
-                <Moon className="h-5 w-5 text-neutral-800" />
+                <Moon className="h-5 w-5 text-neutral-800 cursor-pointer" />
             ) : (
-                <Sun className="h-5 w-5 text-neutral-200" />
+                <Sun className="h-5 w-5 text-neutral-200 cursor-pointer" />
             )}
         </button>
     );

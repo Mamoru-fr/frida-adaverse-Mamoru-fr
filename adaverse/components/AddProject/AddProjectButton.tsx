@@ -20,7 +20,7 @@ export default function AddProjectButton() {
           alert("Vous devez être connecté pour ajouter un projet.");
           redirect('/connections');
         }}
-        className={`flex items-center gap-2 rounded-md ${CombinedColors.button.primary.bg} ${CombinedColors.button.primary.text} px-4 py-2 text-sm font-semibold transition-colors ${CombinedColors.button.primary.hover}`}
+        className={`flex items-center gap-2 rounded-md ${CombinedColors.button.primary.bg} ${CombinedColors.button.primary.text} px-4 py-2 text-sm font-semibold transition-colors ${CombinedColors.button.primary.hover} cursor-pointer`}
         aria-label="Ajouter un projet"
       >
         <Plus className="h-5 w-5" />
