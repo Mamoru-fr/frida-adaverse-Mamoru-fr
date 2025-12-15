@@ -20,7 +20,7 @@ export function PromotionFilterDropdown({ value, onChange }: PromotionFilterDrop
     <select
       value={value === null ? '' : value.toString()}
       onChange={handleChange}
-      className={`rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} h-10 text-sm px-3 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500`}
+      className={`rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} h-10 text-sm px-3 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500  cursor-pointer`}
     >
       <option value="">Toutes les promotions</option>
       {listAdaPromotions.map((promotion) => (
