@@ -5,6 +5,7 @@ import {externalURLformat} from "@/utils/externalURLformat";
 import {FormatDate} from "@/utils/formatDate";
 import {Image} from 'lucide-react'
 import {useAdaPromotions} from "@/context/AdaPromotionsContext";
+import {useRouter} from "next/navigation";
 
 interface ProjectCardProps {
   project: Project;
@@ -12,6 +13,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({project}: ProjectCardProps) {
   const {listAdaPromotions} = useAdaPromotions();
+  const router = useRouter();
 
   // Get unique promotions from students
   const uniquePromotions = project.students 
@@ -27,8 +29,16 @@ export default function ProjectCard({project}: ProjectCardProps) {
     promotionText = 'Inter-promotions';
   }
 
+  const handleCardClick = () => {
+    router.push(`/${project.URLName}`);
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="group h-full cursor-pointer">
+    <div className="group h-full cursor-pointer" onClick={handleCardClick}>
       <div className="relative overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-900 transition-all duration-300 hover:shadow-xl h-full flex flex-col">
         {/* Promotion Badge */}
         {promotionText && (
@@ -84,16 +94,16 @@ export default function ProjectCard({project}: ProjectCardProps) {
 
           {/* Buttons */}
           <div className="flex gap-3 mt-auto">
-            <a
-              href={`/${project.URLName}`}
-              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-neutral-900 dark:bg-white px-4 py-2.5 text-sm font-semibold text-white dark:text-black no-underline transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200"
+            <button
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-neutral-900 dark:bg-white px-4 py-2.5 text-sm font-semibold text-white dark:text-black transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200 cursor-pointer"
             >
               En savoir plus
-            </a>
+            </button>
             <a
               href={externalURLformat(project.githubRepoURL)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleButtonClick}
               className="flex items-center justify-center gap-2 rounded-md bg-neutral-200 dark:bg-neutral-800 px-4 py-2.5 text-sm font-semibold text-black dark:text-white no-underline transition-colors hover:bg-neutral-300 dark:hover:bg-neutral-700"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -105,6 +115,7 @@ export default function ProjectCard({project}: ProjectCardProps) {
                 href={externalURLformat(project.demoURL)}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleButtonClick}
                 className="flex items-center justify-center rounded-md bg-neutral-200 dark:bg-neutral-800 px-4 py-2.5 no-underline transition-colors hover:bg-neutral-300 dark:hover:bg-neutral-700"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
